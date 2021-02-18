@@ -7,8 +7,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_math/flutter_math.dart';
 
 /// The basic WebView for displaying the created HTML String
-class KaTeXTest extends StatefulWidget {
-  const KaTeXTest({
+class KaTeX extends StatefulWidget {
+  const KaTeX({
     required this.laTeXCode,
     this.delimiter = r'$',
     this.displayDelimiter = r'$$',
@@ -25,10 +25,10 @@ class KaTeXTest extends StatefulWidget {
   final String displayDelimiter;
 
   @override
-  State<KaTeXTest> createState() => CaTeXState();
+  State<KaTeX> createState() => CaTeXState();
 }
 
-class CaTeXState extends State<KaTeXTest> {
+class CaTeXState extends State<KaTeX> {
   @override
   Widget build(BuildContext context) {
     /// Fetching the Widget's LaTeX code as well as it's [TextStyle]
