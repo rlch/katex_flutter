@@ -1,14 +1,14 @@
 library katex_flutter;
 
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:catex/catex.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_math/flutter_math.dart';
 
 /// The basic WebView for displaying the created HTML String
-class KaTeX extends StatefulWidget {
-  const KaTeX({
+class KaTeXTest extends StatefulWidget {
+  const KaTeXTest({
     required this.laTeXCode,
     this.delimiter = r'$',
     this.displayDelimiter = r'$$',
@@ -25,10 +25,10 @@ class KaTeX extends StatefulWidget {
   final String displayDelimiter;
 
   @override
-  State<KaTeX> createState() => CaTeXState();
+  State<KaTeXTest> createState() => CaTeXState();
 }
 
-class CaTeXState extends State<KaTeX> {
+class CaTeXState extends State<KaTeXTest> {
   @override
   Widget build(BuildContext context) {
     /// Fetching the Widget's LaTeX code as well as it's [TextStyle]
@@ -70,14 +70,20 @@ class CaTeXState extends State<KaTeX> {
       if (match.group(3) != null) {
         textBlocks.add(WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: CaTeX(match.group(3)?.trim() ?? '')));
+            child: Math.tex(
+              match.group(3)!.trim(),
+              mathStyle: MathStyle.text,
+            )));
       } else {
         textBlocks.addAll([
           const TextSpan(text: '\n'),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
-                child: CaTeX(match.group(6)?.trim() ?? '')),
+                child: Math.tex(
+              match.group(6)!.trim(),
+              mathStyle: MathStyle.text,
+            )),
           ),
           const TextSpan(text: '\n')
         ]);
