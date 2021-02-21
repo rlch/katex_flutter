@@ -70,10 +70,11 @@ class CaTeXState extends State<KaTeX> {
       if (match.group(3) != null) {
         textBlocks.add(WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: Math.tex(
+            child: DefaultTextStyle.merge(
+                child: Math.tex(
               match.group(3)!.trim(),
               mathStyle: MathStyle.text,
-            )));
+            ))));
       } else {
         textBlocks.addAll([
           const TextSpan(text: '\n'),
@@ -82,7 +83,6 @@ class CaTeXState extends State<KaTeX> {
             child: DefaultTextStyle.merge(
                 child: Math.tex(
               match.group(6)!.trim(),
-              mathStyle: MathStyle.text,
             )),
           ),
           const TextSpan(text: '\n')
