@@ -3,7 +3,7 @@ description: Performantly render scientific LaTeX equations using the KaTeX libr
 
 publish_to: "none"
 
-version: 4.0.2+27
+version: 4.0.2+28
 homepage: https://gitlab.com/testapp-system/katex_flutter
 respsitory: https://gitlab.com/testapp-system/katex_flutter.git
 issue_tracker: https://gitlab.com/testapp-system/katex_flutter/issues
@@ -15,7 +15,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_math:
-    git: https://github.com/rlch/flutter_math.git
+    git:
+      url: https://github.com/rlch/flutter_math.git
+      ref: 0.2.x
 
 dev_dependencies:
   flutter_test:
