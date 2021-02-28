@@ -1,5 +1,8 @@
 name: katex_flutter
 description: Performantly render scientific LaTeX equations using the KaTeX library on Android, iOS, the Web and the Desktop platform.
+
+publish_to: "none"
+
 version: 4.0.2+27
 homepage: https://gitlab.com/testapp-system/katex_flutter
 respsitory: https://gitlab.com/testapp-system/katex_flutter.git
@@ -11,7 +14,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_math: ^0.2.1
+  flutter_math:
+    git: https://github.com/rlch/flutter_math.git
 
 dev_dependencies:
   flutter_test:
