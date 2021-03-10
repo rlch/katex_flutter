@@ -31,16 +31,21 @@ class CaTeXState extends State<KaTeX> {
     /// code by looking for the specified delimiters
 
     /// Welcome to hell :)
-    const rawRegExp =
-        r'(?<!\\)((?<!\$)\${1,2}(?!\$))(?(1)(.*?)(?<!\\)(?<!\$)\1(?!\$))| ';
-
     if (laTeXCode == null) return widget.laTeXCode;
-    final List<RegExpMatch> matches =
-        RegExp(rawRegExp, dotAll: true).allMatches(laTeXCode).toList();
+    final List<RegExpMatch> matches = RegExp(
+      r'(?<!\\)((?<!\$)\${1,2}(?!\$))((.*?)(?<!\\)(?<!\$)\1(?!\$))',
+      multiLine: true,
+      dotAll: true,
+    ).allMatches(laTeXCode).toList();
 
     /// If no single Math part found, returning
     /// the raw [Text] from widget.laTeXCode
-    if (matches.isEmpty) return widget.laTeXCode;
+    if (matches.isEmpty) {
+      return Text(
+        laTeXCode.replaceAll(RegExp(r'\\'), ''),
+        style: defaultTextStyle ?? Theme.of(context).textTheme.bodyText1,
+      );
+    }
 
     /// Otherwise looping threw all matches and building
     /// a [RichText] from [TextSpan] and [WidgetSpan] widgets
@@ -52,30 +57,35 @@ class CaTeXState extends State<KaTeX> {
       /// (beginning of the [String] in first case),
       /// first adding the found [Text]
       if (match.start > lastTextEnd) {
-        textBlocks
-            .add(TextSpan(text: laTeXCode.substring(lastTextEnd, match.start)));
+        textBlocks.add(
+          TextSpan(
+            text: laTeXCode
+                .substring(lastTextEnd, match.start)
+                .replaceAll(RegExp(r'\\'), ''),
+          ),
+        );
       }
 
       /// Adding the [CaTeX] widget to the children
-      if (match.group(2) != null) {
+      if (match.group(1) == r'$' && match.group(3) != null) {
         textBlocks.add(WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
                 child: Math.tex(
-              match.group(2)!.trim(),
+              match.group(3)!.trim(),
               mathStyle: MathStyle.text,
             ))));
-      } else {
+      } else if (match.group(1) == r'$$' && match.group(3) != null) {
         textBlocks.addAll([
-          const TextSpan(text: '\n'),
+          const TextSpan(text: '\n\n'),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
                 child: Math.tex(
-              match.group(2)!.trim(),
+              match.group(3)!.trim(),
             )),
           ),
-          const TextSpan(text: '\n')
+          const TextSpan(text: '\n\n')
         ]);
       }
       lastTextEnd = match.end;
@@ -84,7 +94,11 @@ class CaTeXState extends State<KaTeX> {
     /// If there is any text left after
     /// the end of the last match, adding it to children
     if (lastTextEnd < laTeXCode.length) {
-      textBlocks.add(TextSpan(text: laTeXCode.substring(lastTextEnd)));
+      textBlocks.add(
+        TextSpan(
+          text: laTeXCode.substring(lastTextEnd).replaceAll(RegExp(r'\\'), ''),
+        ),
+      );
     }
 
     /// Returning a RichText containing all
@@ -92,10 +106,9 @@ class CaTeXState extends State<KaTeX> {
     /// obeying the specified style in widget.laTeXCode
     return Text.rich(
       TextSpan(
-          children: textBlocks,
-          style: (defaultTextStyle == null)
-              ? Theme.of(context).textTheme.bodyText1
-              : defaultTextStyle),
+        children: textBlocks,
+        style: defaultTextStyle ?? Theme.of(context).textTheme.bodyText1,
+      ),
     );
   }
 }
