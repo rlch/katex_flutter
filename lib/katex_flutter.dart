@@ -10,19 +10,11 @@ import 'package:flutter_math/flutter_math.dart';
 class KaTeX extends StatefulWidget {
   const KaTeX({
     required this.laTeXCode,
-    this.delimiter = r'$',
-    this.displayDelimiter = r'$$',
     Key? key,
   }) : super(key: key);
 
   /// a Text used for the rendered code as well as for the style
   final Text laTeXCode;
-
-  /// The delimiter to be used for inline LaTeX
-  final String delimiter;
-
-  /// The delimiter to be used for Display (centered, "important") LaTeX
-  final String displayDelimiter;
 
   @override
   State<KaTeX> createState() => CaTeXState();
@@ -37,12 +29,10 @@ class CaTeXState extends State<KaTeX> {
 
     /// Building [RegExp] to find any Math part of the LaTeX
     /// code by looking for the specified delimiters
-    final String delimiter = widget.delimiter.replaceAll(r'$', r'\$');
-    final String displayDelimiter =
-        widget.displayDelimiter.replaceAll(r'$', r'\$');
 
-    final String rawRegExp =
-        '(($delimiter)([^$delimiter]*[^\\\\\\$delimiter])($delimiter)|($displayDelimiter)([^$displayDelimiter]*[^\\\\\\$displayDelimiter])($displayDelimiter))';
+    /// Welcome to hell :)
+    const rawRegExp =
+        r'(?<!\\)((?<!\$)\${1,2}(?!\$))(?(1)(.*?)(?<!\\)(?<!\$)\1(?!\$))| ';
 
     if (laTeXCode == null) return widget.laTeXCode;
     final List<RegExpMatch> matches =
@@ -67,12 +57,12 @@ class CaTeXState extends State<KaTeX> {
       }
 
       /// Adding the [CaTeX] widget to the children
-      if (match.group(3) != null) {
+      if (match.group(2) != null) {
         textBlocks.add(WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
                 child: Math.tex(
-              match.group(3)!.trim(),
+              match.group(2)!.trim(),
               mathStyle: MathStyle.text,
             ))));
       } else {
@@ -82,7 +72,7 @@ class CaTeXState extends State<KaTeX> {
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
                 child: Math.tex(
-              match.group(6)!.trim(),
+              match.group(2)!.trim(),
             )),
           ),
           const TextSpan(text: '\n')
