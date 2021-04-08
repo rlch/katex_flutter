@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_math/flutter_math.dart';
+import 'package:flutter_math_fork/flutter_math.dart';
 
 /// The basic WebView for displaying the created HTML String
 class KaTeX extends StatefulWidget {
