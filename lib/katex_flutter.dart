@@ -68,25 +68,34 @@ class CaTeXState extends State<KaTeX> {
 
       /// Adding the [CaTeX] widget to the children
       if (match.group(1) == r'$' && match.group(3) != null) {
-        textBlocks.add(WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: DefaultTextStyle.merge(
-                child: Math.tex(
-              match.group(3)!.trim(),
-              mathStyle: MathStyle.text,
-            ))));
-      } else if (match.group(1) == r'$$' && match.group(3) != null) {
-        textBlocks.addAll([
-          const TextSpan(text: '\n\n'),
+        textBlocks.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
-                child: Math.tex(
-              match.group(3)!.trim(),
-            )),
+              style: defaultTextStyle,
+              child: Math.tex(
+                match.group(3)!.trim(),
+                mathStyle: MathStyle.text,
+              ),
+            ),
           ),
-          const TextSpan(text: '\n\n')
-        ]);
+        );
+      } else if (match.group(1) == r'$$' && match.group(3) != null) {
+        textBlocks.addAll(
+          [
+            const TextSpan(text: '\n\n'),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: DefaultTextStyle.merge(
+                style: defaultTextStyle,
+                child: Math.tex(
+                  match.group(3)!.trim(),
+                ),
+              ),
+            ),
+            const TextSpan(text: '\n\n')
+          ],
+        );
       }
       lastTextEnd = match.end;
     }
