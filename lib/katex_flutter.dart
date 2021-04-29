@@ -83,7 +83,7 @@ class KaTeXState extends State<KaTeX> {
             child: DefaultTextStyle.merge(
               style: defaultTextStyle,
               child: Math.tex(
-                match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'$'),
+                match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'\$'),
                 mathStyle: MathStyle.text,
               ),
             ),
@@ -98,7 +98,7 @@ class KaTeXState extends State<KaTeX> {
               child: DefaultTextStyle.merge(
                 style: defaultTextStyle,
                 child: Math.tex(
-                  match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'$'),
+                  match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'\$'),
                 ),
               ),
             ),
