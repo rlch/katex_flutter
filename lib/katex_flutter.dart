@@ -17,10 +17,10 @@ class KaTeX extends StatefulWidget {
   final Text laTeXCode;
 
   @override
-  State<KaTeX> createState() => CaTeXState();
+  State<KaTeX> createState() => KaTeXState();
 }
 
-class CaTeXState extends State<KaTeX> {
+class KaTeXState extends State<KaTeX> {
   @override
   Widget build(BuildContext context) {
     /// Fetching the Widget's LaTeX code as well as it's [TextStyle]
@@ -31,18 +31,26 @@ class CaTeXState extends State<KaTeX> {
     /// code by looking for the specified delimiters
 
     /// Welcome to hell :)
+    ///
+    /// Original regex:
+    /// `(?<!\\)((?<!\$)\${1,2}(?!\$))((.*?)(?<!\\)(?<!\$)\1(?!\$))`
     if (laTeXCode == null) return widget.laTeXCode;
+
+    final String tokenized = laTeXCode.replaceAll(RegExp(r'\\\$'), ':dollar:');
+
     final List<RegExpMatch> matches = RegExp(
-      r'(?<!\\)((?<!\$)\${1,2}(?!\$))((.*?)(?<!\\)(?<!\$)\1(?!\$))',
+      r'(\${1,2})(.*?)(\1)',
       multiLine: true,
       dotAll: true,
-    ).allMatches(laTeXCode).toList();
+    ).allMatches(tokenized).toList();
 
     /// If no single Math part found, returning
     /// the raw [Text] from widget.laTeXCode
     if (matches.isEmpty) {
       return Text(
-        laTeXCode.replaceAll(RegExp(r'\\'), ''),
+        tokenized
+            .replaceAll(RegExp(r'\\'), '')
+            .replaceAll(RegExp(':dollar:'), r'$'),
         style: defaultTextStyle ?? Theme.of(context).textTheme.bodyText1,
       );
     }
@@ -59,9 +67,10 @@ class CaTeXState extends State<KaTeX> {
       if (match.start > lastTextEnd) {
         textBlocks.add(
           TextSpan(
-            text: laTeXCode
+            text: tokenized
                 .substring(lastTextEnd, match.start)
-                .replaceAll(RegExp(r'\\'), ''),
+                .replaceAll(RegExp(r'\\'), '')
+                .replaceAll(RegExp(':dollar:'), r'$'),
           ),
         );
       }
@@ -74,7 +83,7 @@ class CaTeXState extends State<KaTeX> {
             child: DefaultTextStyle.merge(
               style: defaultTextStyle,
               child: Math.tex(
-                match.group(3)!.trim(),
+                match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'$'),
                 mathStyle: MathStyle.text,
               ),
             ),
@@ -89,7 +98,7 @@ class CaTeXState extends State<KaTeX> {
               child: DefaultTextStyle.merge(
                 style: defaultTextStyle,
                 child: Math.tex(
-                  match.group(3)!.trim(),
+                  match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'$'),
                 ),
               ),
             ),
@@ -102,10 +111,13 @@ class CaTeXState extends State<KaTeX> {
 
     /// If there is any text left after
     /// the end of the last match, adding it to children
-    if (lastTextEnd < laTeXCode.length) {
+    if (lastTextEnd < tokenized.length) {
       textBlocks.add(
         TextSpan(
-          text: laTeXCode.substring(lastTextEnd).replaceAll(RegExp(r'\\'), ''),
+          text: tokenized
+              .substring(lastTextEnd)
+              .replaceAll(RegExp(r'\\'), '')
+              .replaceAll(RegExp(':dollar:'), r'$'),
         ),
       );
     }
