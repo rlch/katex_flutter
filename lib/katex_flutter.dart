@@ -76,20 +76,20 @@ class KaTeXState extends State<KaTeX> {
       }
 
       /// Adding the [CaTeX] widget to the children
-      if (match.group(1) == r'$' && match.group(3) != null) {
+      if (match.group(1) == r'$' && match.group(2) != null) {
         textBlocks.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: DefaultTextStyle.merge(
               style: defaultTextStyle,
               child: Math.tex(
-                match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'\$'),
+                match.group(2)!.trim().replaceAll(RegExp(':dollar:'), r'\$'),
                 mathStyle: MathStyle.text,
               ),
             ),
           ),
         );
-      } else if (match.group(1) == r'$$' && match.group(3) != null) {
+      } else if (match.group(1) == r'$$' && match.group(2) != null) {
         textBlocks.addAll(
           [
             const TextSpan(text: '\n\n'),
@@ -98,7 +98,7 @@ class KaTeXState extends State<KaTeX> {
               child: DefaultTextStyle.merge(
                 style: defaultTextStyle,
                 child: Math.tex(
-                  match.group(3)!.trim().replaceAll(RegExp(':dollar:'), r'\$'),
+                  match.group(2)!.trim().replaceAll(RegExp(':dollar:'), r'\$'),
                 ),
               ),
             ),

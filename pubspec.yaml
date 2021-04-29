@@ -3,7 +3,7 @@ description: Performantly render scientific LaTeX equations using the KaTeX libr
 
 publish_to: "none"
 
-version: 5.0.3+1
+version: 5.0.3+2
 homepage: https://gitlab.com/testapp-system/katex_flutter
 respsitory: https://gitlab.com/testapp-system/katex_flutter.git
 issue_tracker: https://gitlab.com/testapp-system/katex_flutter/issues
