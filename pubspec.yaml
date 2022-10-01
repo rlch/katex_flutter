@@ -11,6 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_math_fork: ^0.3.3
+  flutter_math_fork: ^0.6.0
 dev_dependencies:
   lint: ^1.5.2
