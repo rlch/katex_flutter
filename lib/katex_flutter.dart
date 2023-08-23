@@ -1,8 +1,6 @@
 library katex_flutter;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_math_fork/flutter_math.dart';
 
@@ -30,8 +28,6 @@ class KaTeXState extends State<KaTeX> {
     /// Building [RegExp] to find any Math part of the LaTeX
     /// code by looking for the specified delimiters
 
-    /// Welcome to hell :)
-    ///
     /// Original regex:
     /// `(?<!\\)((?<!\$)\${1,2}(?!\$))((.*?)(?<!\\)(?<!\$)\1(?!\$))`
     if (laTeXCode == null) return widget.laTeXCode;
@@ -51,7 +47,7 @@ class KaTeXState extends State<KaTeX> {
         tokenized
             .replaceAll(RegExp(r'\\'), '')
             .replaceAll(RegExp(':dollar:'), r'$'),
-        style: defaultTextStyle ?? Theme.of(context).textTheme.bodyText1,
+        style: defaultTextStyle ?? Theme.of(context).textTheme.bodyLarge,
       );
     }
 
@@ -128,7 +124,7 @@ class KaTeXState extends State<KaTeX> {
     return Text.rich(
       TextSpan(
         children: textBlocks,
-        style: defaultTextStyle ?? Theme.of(context).textTheme.bodyText1,
+        style: defaultTextStyle ?? Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }
